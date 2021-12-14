@@ -13,6 +13,7 @@
 </head>
 <body>
 	<h3>My custom login page</h3>
+	
 	<form:form action="${pageContext.request.contextPath}/authenticateTheUser" method="post">
 		<c:if test="${param.error != null }">
 			<i class="failed">Invalid user name or password!</i>

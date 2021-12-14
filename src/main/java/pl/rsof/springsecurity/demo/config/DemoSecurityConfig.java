@@ -46,9 +46,11 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 		.anyRequest().authenticated()			// any request to the app must be authenticated (logged in)
 		.and()
 		.formLogin()         					// customizing the form login process
-		.loginPage("/showLoginPage")     		// show custom form at the request mapping "/showLoginPage"
-		.loginProcessingUrl("/authenticateTheUser")	// login form should POST data to this URL for processing (login and password)
-		.permitAll();							// allow everyone to see login page. No need to be logged in
+			.loginPage("/showLoginPage")     		// show custom form at the request mapping "/showLoginPage"
+			.loginProcessingUrl("/authenticateTheUser")	// login form should POST data to this URL for processing (login and password)
+			.permitAll()							// allow everyone to see login page. No need to be logged in
+		.and()
+		.logout().permitAll();					// logout support for default url '/logout'
 	}	
 	
 }
