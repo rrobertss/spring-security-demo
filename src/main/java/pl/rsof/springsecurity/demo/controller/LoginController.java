@@ -28,4 +28,11 @@ public class LoginController {
 	}
 	
 
+	// request mapping for /accessDenied
+	@GetMapping("/accessDenied")
+	public String accessDeniedPage() {
+
+		return "access-denied";
+	}
+	
 }

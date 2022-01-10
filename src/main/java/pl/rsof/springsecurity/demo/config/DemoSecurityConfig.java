@@ -33,12 +33,13 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		auth.inMemoryAuthentication()
 			.withUser(users.username("john").password("test123").roles("EMPLOYEE"))
-			.withUser(users.username("mary").password("test123").roles("MANAGER"))
-			.withUser(users.username("susan").password("test123").roles("ADMIN"));
+			.withUser(users.username("mary").password("test123").roles("EMPLOYEE", "MANAGER"))
+			.withUser(users.username("susan").password("test123").roles("EMPLOYEE", "ADMIN"));
 		
 	}
 
-	
+	// bez ról, wystarczy sie zalogować
+	/*
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -51,6 +52,26 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 			.permitAll()							// allow everyone to see login page. No need to be logged in
 		.and()
 		.logout().permitAll();					// logout support for default url '/logout'
-	}	
+	}*/
+	
+	
+	// obsluga ról
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		http.authorizeRequests() 				// restrict access based on the HttpServletRequest
+		.antMatchers("/").hasRole("EMPLOYEE")
+		.antMatchers("/leaders/**").hasRole("MANAGER")
+		.antMatchers("/systems/**").hasRole("ADMIN")
+		.and()
+		.formLogin()         					// customizing the form login process
+			.loginPage("/showLoginPage")     		// show custom form at the request mapping "/showLoginPage"
+			.loginProcessingUrl("/authenticateTheUser")	// login form should POST data to this URL for processing (login and password)
+			.permitAll()							// allow everyone to see login page. No need to be logged in
+		.and()
+		.logout().permitAll()					// logout support for default url '/logout'
+		.and()
+		.exceptionHandling().accessDeniedPage("/accessDenied");
+	}
 	
 }
